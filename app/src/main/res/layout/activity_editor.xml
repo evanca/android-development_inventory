@@ -1,86 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!-- Using scroll view to support smaller screens -->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/edit_product_name"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/edit_product_price"
-        app:layout_constraintEnd_toEndOf="@+id/edit_product_price"
-        app:layout_constraintStart_toStartOf="@+id/edit_product_price"
-        app:layout_constraintTop_toBottomOf="@+id/edit_product_model" />
+    <android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/quadruple_grid_material_design_32dp">
 
-    <EditText
-        android:id="@+id/edit_product_model"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/edit_product_name"
-        app:layout_constraintEnd_toEndOf="@+id/edit_product_name"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/edit_product_name"
-        app:layout_constraintTop_toTopOf="parent" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/double_grid_material_design_16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <EditText
-        android:id="@+id/edit_product_price"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/edit_product_quantity"
-        app:layout_constraintEnd_toEndOf="@+id/edit_product_quantity"
-        app:layout_constraintStart_toStartOf="@+id/edit_product_quantity"
-        app:layout_constraintTop_toBottomOf="@+id/edit_product_name" />
+            <EditText
+                android:id="@+id/edit_product_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/item_name"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/edit_product_quantity"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/edit_product_shelf"
-        app:layout_constraintEnd_toEndOf="@+id/edit_product_shelf"
-        app:layout_constraintStart_toStartOf="@+id/edit_product_shelf"
-        app:layout_constraintTop_toBottomOf="@+id/edit_product_price" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_model"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_name">
 
-    <EditText
-        android:id="@+id/edit_product_shelf"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/edit_product_supplier"
-        app:layout_constraintEnd_toEndOf="@+id/edit_product_supplier"
-        app:layout_constraintStart_toStartOf="@+id/edit_product_supplier"
-        app:layout_constraintTop_toBottomOf="@+id/edit_product_quantity" />
+            <EditText
+                android:id="@+id/edit_product_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/model_no"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:id="@+id/edit_product_supplier"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toTopOf="@+id/edit_product_phone"
-        app:layout_constraintEnd_toEndOf="@+id/edit_product_phone"
-        app:layout_constraintStart_toStartOf="@+id/edit_product_phone"
-        app:layout_constraintTop_toBottomOf="@+id/edit_product_shelf" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_model">
 
-    <EditText
-        android:id="@+id/edit_product_phone"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:hint=""
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="parent"
+            <EditText
+                android:id="@+id/edit_product_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/price_pcs"
+                android:inputType="numberDecimal" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_price">
+
+            <EditText
+                android:id="@+id/edit_product_quantity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/quantity"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_shelf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_quantity">
+
+            <EditText
+                android:id="@+id/edit_product_shelf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/shelf_no"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_supplier"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_shelf">
+
+            <EditText
+                android:id="@+id/edit_product_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/supplier_code"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/product_phone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/product_supplier">
+
+            <EditText
+                android:id="@+id/edit_product_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/supplier_phone"
+                android:inputType="text" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/button_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            app:layout_constraintBaseline_toBaselineOf="@+id/button_save"
+            app:layout_constraintEnd_toStartOf="@+id/button_save"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/quadruple_grid_material_design_32dp"
+            android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_product_supplier" />
+            app:layout_constraintStart_toEndOf="@+id/button_cancel"
+            app:layout_constraintTop_toBottomOf="@+id/product_phone" />
 
 </android.support.constraint.ConstraintLayout>
+</ScrollView>

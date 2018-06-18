@@ -20,8 +20,13 @@ public class EditorActivity extends AppCompatActivity {
         setContentView(R.layout.activity_editor);
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText = (EditText) findViewById(R.id.edit_product_name);
-
+        mNameEditText = findViewById(R.id.edit_product_name);
+        mModelEditText = findViewById(R.id.edit_product_model);
+        mPriceEditText = findViewById(R.id.edit_product_price);
+        mQuantityEditText = findViewById(R.id.edit_product_quantity);
+        mShelfEditText = findViewById(R.id.edit_product_shelf);
+        mSupplierEditText = findViewById(R.id.edit_product_supplier);
+        mPhoneEditText = findViewById(R.id.edit_product_phone);
     }
 
 }
