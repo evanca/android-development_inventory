@@ -2,4 +2,5 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="double_grid_material_design_16dp">16dp</dimen>
     <dimen name="quadruple_grid_material_design_32dp">32dp</dimen>
+    <dimen name="layout_width_small_108dp">108dp</dimen>
 </resources>
