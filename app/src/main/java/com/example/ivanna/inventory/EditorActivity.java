@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +22,9 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mShelfEditText;
     private EditText mSupplierEditText;
     private EditText mPhoneEditText;
+    private double price;
+    private int quantity;
+    private int supplierCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +40,14 @@ public class EditorActivity extends AppCompatActivity {
         mSupplierEditText = findViewById(R.id.edit_product_supplier);
         mPhoneEditText = findViewById(R.id.edit_product_phone);
 
+        // Visibility state for softInputMode: please hide any soft input area when normally
+        // appropriate (when the user is navigating forward to your window).
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         final Button cancelButton = findViewById(R.id.button_cancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses Cancel button
+                // Code here executes on main thread after user presses button
                 Intent i = new Intent(EditorActivity.this, MainActivity.class);
                 finish();  // Kill the editor activity
                 startActivity(i);
@@ -49,8 +57,9 @@ public class EditorActivity extends AppCompatActivity {
         final Button saveButton = findViewById(R.id.button_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Code here executes on main thread after user presses Save button
+                // Code here executes on main thread after user presses button
                 insertProduct();
+                finish();
             }
         });
     }
@@ -64,12 +73,18 @@ public class EditorActivity extends AppCompatActivity {
         String nameString = mNameEditText.getText().toString().trim();
         String modelString = mModelEditText.getText().toString().trim();
         String priceString = mPriceEditText.getText().toString().trim();
-        double price = Double.parseDouble(priceString);
+        if (!priceString.isEmpty()) {
+            price = Double.parseDouble(priceString);
+        }
         String quantityString = mQuantityEditText.getText().toString().trim();
-        int quantity = Integer.parseInt(quantityString);
+        if (!quantityString.isEmpty()) {
+            quantity = Integer.parseInt(quantityString);
+        }
         String shelfString = mShelfEditText.getText().toString().trim();
         String supplierString = mSupplierEditText.getText().toString().trim();
-        int supplierCode = Integer.parseInt(supplierString);
+        if (!supplierString.isEmpty()) {
+            supplierCode = Integer.parseInt(supplierString);
+        }
         String phoneString = mPhoneEditText.getText().toString().trim();
 
         // Create database helper

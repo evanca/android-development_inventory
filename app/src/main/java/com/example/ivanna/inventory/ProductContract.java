@@ -15,15 +15,15 @@ public final class ProductContract {
     /* Inner class that defines the table contents */
     // Note that both double and single quotes are used here to prevent syntax errors caused by spaces
     public static class ProductEntry implements BaseColumns {
-        public static final String TABLE_NAME = "products";
+        public static final String TABLE_NAME = "products_table";
         public static final String _ID = BaseColumns._ID;
-        public static final String COLUMN_PRODUCT_NAME = "'Product Name'";
-        public static final String COLUMN_PRODUCT_MODEL = "'Product Model'";
-        public static final String COLUMN_PRODUCT_PRICE = "'Price'";
-        public static final String COLUMN_PRODUCT_QUANTITY = "'Quantity'";
-        public static final String COLUMN_PRODUCT_SHELF = "'Shelf Number'";
-        public static final String COLUMN_PRODUCT_SUPPLIER = "'Supplier Code'";
-        public static final String COLUMN_PRODUCT_PHONE = "'Supplier Phone Number'";
+        public static final String COLUMN_PRODUCT_NAME = "Product_Name";
+        public static final String COLUMN_PRODUCT_MODEL = "Product_Model";
+        public static final String COLUMN_PRODUCT_PRICE = "Price";
+        public static final String COLUMN_PRODUCT_QUANTITY = "Quantity";
+        public static final String COLUMN_PRODUCT_SHELF = "Shelf_Number";
+        public static final String COLUMN_PRODUCT_SUPPLIER = "Supplier_Code";
+        public static final String COLUMN_PRODUCT_PHONE = "Supplier_Phone_Number";
     }
 }
 
