@@ -20,6 +20,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditorActivity"></activity>
+
+        <provider
+            android:name=".ProductProvider"
+            android:authorities="com.example.ivanna.inventory"
+            android:exported="false" />
     </application>
 
 </manifest>

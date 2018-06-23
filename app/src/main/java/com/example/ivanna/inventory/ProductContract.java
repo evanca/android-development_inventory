@@ -1,5 +1,6 @@
 package com.example.ivanna.inventory;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 // The contract class allows you to use the same constants across all the other classes in the same package.
@@ -12,18 +13,37 @@ public final class ProductContract {
     private ProductContract() {
     }
 
+    /**
+     * A convenient string to use for the content authority is the package name for the app, which
+     * is guaranteed to be unique on the device.
+     */
+    public static final String CONTENT_AUTHORITY = "com.example.ivanna.inventory";
+
+    /**
+     * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
+     * the content provider.
+     */
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    /**
+     * Possible path (appended to base content URI for possible URI's)
+     */
+    public static final String PATH_PRODUCTS = "products";
+
     /* Inner class that defines the table contents */
-    // Note that both double and single quotes are used here to prevent syntax errors caused by spaces
     public static class ProductEntry implements BaseColumns {
+
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PRODUCTS);
+
         public static final String TABLE_NAME = "products_table";
         public static final String _ID = BaseColumns._ID;
-        public static final String COLUMN_PRODUCT_NAME = "Product_Name";
-        public static final String COLUMN_PRODUCT_MODEL = "Product_Model";
-        public static final String COLUMN_PRODUCT_PRICE = "Price";
-        public static final String COLUMN_PRODUCT_QUANTITY = "Quantity";
-        public static final String COLUMN_PRODUCT_SHELF = "Shelf_Number";
-        public static final String COLUMN_PRODUCT_SUPPLIER = "Supplier_Code";
-        public static final String COLUMN_PRODUCT_PHONE = "Supplier_Phone_Number";
+        public static final String COLUMN_PRODUCT_NAME = "product_name";
+        public static final String COLUMN_PRODUCT_MODEL = "product_model";
+        public static final String COLUMN_PRODUCT_PRICE = "price";
+        public static final String COLUMN_PRODUCT_QUANTITY = "quantity";
+        public static final String COLUMN_PRODUCT_SHELF = "shelf_number";
+        public static final String COLUMN_PRODUCT_SUPPLIER = "supplier_code";
+        public static final String COLUMN_PRODUCT_PHONE = "supplier_phone_number";
     }
 }
 
