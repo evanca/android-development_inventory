@@ -1,5 +1,6 @@
 package com.example.ivanna.inventory;
 
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -41,6 +42,15 @@ public final class ProductContract {
         public static final String COLUMN_PRODUCT_SHELF = "shelf_number";
         public static final String COLUMN_PRODUCT_SUPPLIER = "supplier_code";
         public static final String COLUMN_PRODUCT_PHONE = "supplier_phone_number";
+
+        // The MIME type for a list of products
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCTS;
+
+        // The MIME type for a single product
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCTS;
+
     }
 }
 
