@@ -3,4 +3,8 @@
     <dimen name="double_grid_material_design_16dp">16dp</dimen>
     <dimen name="quadruple_grid_material_design_32dp">32dp</dimen>
     <dimen name="layout_width_small_108dp">108dp</dimen>
+    <dimen name="font_body_material_design_14sp">14sp</dimen>
+    <dimen name="font_subtitle_18sp">18sp</dimen>
+    <dimen name="font_h6_material_design_20sp">20sp</dimen>
+    <dimen name="small_grid_material_design_4dp">4dp</dimen>
 </resources>
