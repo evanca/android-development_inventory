@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class EditorActivity extends AppCompatActivity {
 
     private EditText mNameEditText;
@@ -87,6 +91,10 @@ public class EditorActivity extends AppCompatActivity {
         }
         String phoneString = mPhoneEditText.getText().toString().trim();
 
+        // Create a datestamp to put in a relevant table column
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        String datestampString = sdf.format(new Date());
+
         // Create a ContentValues object where column names are the keys,
         // and attributes from the editor are the values
         ContentValues values = new ContentValues();
@@ -97,6 +105,7 @@ public class EditorActivity extends AppCompatActivity {
         values.put(ProductEntry.COLUMN_PRODUCT_SHELF, shelfString);
         values.put(ProductEntry.COLUMN_PRODUCT_SUPPLIER, supplierCode);
         values.put(ProductEntry.COLUMN_PRODUCT_PHONE, phoneString);
+        values.put(ProductEntry.COLUMN_PRODUCT_DATESTAMP, datestampString);
 
         // Insert a new product into the provider, returning the content URI for the new product
         Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);

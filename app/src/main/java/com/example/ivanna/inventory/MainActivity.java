@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 ProductEntry.COLUMN_PRODUCT_QUANTITY,
                 ProductEntry.COLUMN_PRODUCT_SHELF,
                 ProductEntry.COLUMN_PRODUCT_SUPPLIER,
-                ProductEntry.COLUMN_PRODUCT_PHONE};
+                ProductEntry.COLUMN_PRODUCT_PHONE,
+                ProductEntry.COLUMN_PRODUCT_DATESTAMP};
 
         // Perform a query on the provider using the ContentResolver.
         Cursor cursor = getContentResolver().query(
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
                     ProductEntry.COLUMN_PRODUCT_QUANTITY + " - " +
                     ProductEntry.COLUMN_PRODUCT_SHELF + " - " +
                     ProductEntry.COLUMN_PRODUCT_SUPPLIER + " - " +
-                    ProductEntry.COLUMN_PRODUCT_PHONE + "\n");
+                    ProductEntry.COLUMN_PRODUCT_PHONE + " - " +
+                    ProductEntry.COLUMN_PRODUCT_DATESTAMP + "\n");
 
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(ProductEntry._ID);
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
             int shelfColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SHELF);
             int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
             int phoneColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHONE);
+            int datestampColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_DATESTAMP);
 
             // Iterate through all the returned rows in the cursor
             while (cursor.moveToNext()) {
@@ -99,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 String currentShelf = cursor.getString(shelfColumnIndex);
                 int currentSupplier = cursor.getInt(supplierColumnIndex);
                 String currentPhone = cursor.getString(phoneColumnIndex);
+                String currentDatestamp = cursor.getString(datestampColumnIndex);
 
                 // Display the values from each column of the current row in the cursor in the TextView
                 displayView.append(("\n" + currentID + " - " +
@@ -108,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
                         currentQuantity + " - " +
                         currentShelf + " - " +
                         currentSupplier + " - " +
-                        currentPhone));
+                        currentPhone + " - " +
+                        currentDatestamp));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its

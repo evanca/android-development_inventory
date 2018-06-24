@@ -42,6 +42,7 @@ public final class ProductContract {
         public static final String COLUMN_PRODUCT_SHELF = "shelf_number";
         public static final String COLUMN_PRODUCT_SUPPLIER = "supplier_code";
         public static final String COLUMN_PRODUCT_PHONE = "supplier_phone_number";
+        public static final String COLUMN_PRODUCT_DATESTAMP = "datestamp";
 
         // The MIME type for a list of products
         public static final String CONTENT_LIST_TYPE =
