@@ -2,7 +2,6 @@ package com.example.ivanna.inventory;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +11,6 @@ import android.widget.TextView;
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
 
 public class MainActivity extends AppCompatActivity {
-
-    /**
-     * Database helper that will provide us access to the database
-     */
-    private ProductDbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new ProductDbHelper(this);
         displayDatabaseInfo();
     }
 
@@ -50,8 +41,6 @@ public class MainActivity extends AppCompatActivity {
      * the database.
      */
     private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query
@@ -65,15 +54,13 @@ public class MainActivity extends AppCompatActivity {
                 ProductEntry.COLUMN_PRODUCT_SUPPLIER,
                 ProductEntry.COLUMN_PRODUCT_PHONE};
 
-        // Perform a query on the products table
-        Cursor cursor = db.query(
-                ProductEntry.TABLE_NAME,   // The table to query
-                projection,            // The columns to return
-                null,                  // The columns for the WHERE clause
-                null,                  // The values for the WHERE clause
-                null,                  // Don't group the rows
-                null,                  // Don't filter by row groups
-                null);                   // The sort order
+        // Perform a query on the provider using the ContentResolver.
+        Cursor cursor = getContentResolver().query(
+                ProductEntry.CONTENT_URI, // The content URI of the table
+                projection, // The columns to return
+                null, // The columns for the WHERE clause
+                null, // The values for the WHERE clause
+                null); // The sort order
 
         TextView displayView = (TextView) findViewById(R.id.textview_info);
 

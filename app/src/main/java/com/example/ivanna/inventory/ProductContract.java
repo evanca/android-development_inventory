@@ -8,27 +8,24 @@ import android.provider.BaseColumns;
 
 public final class ProductContract {
 
-    // To prevent someone from accidentally instantiating the contract class,
-    // make the constructor private.
-    private ProductContract() {
-    }
-
     /**
      * A convenient string to use for the content authority is the package name for the app, which
      * is guaranteed to be unique on the device.
      */
     public static final String CONTENT_AUTHORITY = "com.example.ivanna.inventory";
-
     /**
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider.
      */
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    /**
-     * Possible path (appended to base content URI for possible URI's)
-     */
-    public static final String PATH_PRODUCTS = "products";
+    // Path that points to individual table
+    public static final String PATH_PRODUCTS = "products_table";
+
+    // To prevent someone from accidentally instantiating the contract class,
+    // make the constructor private.
+    private ProductContract() {
+    }
 
     /* Inner class that defines the table contents */
     public static class ProductEntry implements BaseColumns {

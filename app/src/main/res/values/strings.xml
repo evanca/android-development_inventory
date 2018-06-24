@@ -10,4 +10,6 @@
     <string name="supplier_phone">Supplier phone</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="editor_insert_successful">Product saved</string>
+    <string name="editor_insert_failed">Error with saving an item</string>
 </resources>
