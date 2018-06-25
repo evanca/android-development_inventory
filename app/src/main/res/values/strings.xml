@@ -12,4 +12,6 @@
     <string name="save">Save</string>
     <string name="editor_insert_successful">Product saved</string>
     <string name="editor_insert_failed">Error with saving an item</string>
+    <string name="nothing_in_the_warehouse_now">Nothing in the warehouse now...</string>
+    <string name="get_started_by_adding_a_product">Get started by adding a product</string>
 </resources>

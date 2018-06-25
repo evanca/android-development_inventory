@@ -65,6 +65,6 @@ public class ProductCursorAdapter extends CursorAdapter {
 
         // Format the price to show two zeros after period
         DecimalFormat df = new DecimalFormat("0.00");
-        price.setText(String.valueOf(df.format(currentPrice)));
+        price.setText("x " + String.valueOf(df.format(currentPrice)));
     }
 }

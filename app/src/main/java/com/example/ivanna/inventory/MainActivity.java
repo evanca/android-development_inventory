@@ -62,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
         // Find ListView to populate
         ListView warehouseItems = findViewById(R.id.warehouse_listview);
 
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items
+        View emptyView = findViewById(R.id.empty_view);
+        warehouseItems.setEmptyView(emptyView);
+
         // Setup cursor adapter using cursor from last step
         ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
 
