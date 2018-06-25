@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ListView;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
 
@@ -36,10 +36,6 @@ public class MainActivity extends AppCompatActivity {
         displayDatabaseInfo();
     }
 
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the database.
-     */
     private void displayDatabaseInfo() {
 
         // Define a projection that specifies which columns from the database
@@ -63,62 +59,14 @@ public class MainActivity extends AppCompatActivity {
                 null, // The values for the WHERE clause
                 null); // The sort order
 
-        TextView displayView = (TextView) findViewById(R.id.textview_info);
+        // Find ListView to populate
+        ListView warehouseItems = findViewById(R.id.warehouse_listview);
 
-        try {
-            // In the while loop below, iterate through the rows of the cursor and display
-            // the information from each column in this order.
-            displayView.setText("The warehouse contains " + cursor.getCount() + " products.\n\n");
-            displayView.append(ProductEntry._ID + " - " +
-                    ProductEntry.COLUMN_PRODUCT_NAME + " - " +
-                    ProductEntry.COLUMN_PRODUCT_MODEL + " - " +
-                    ProductEntry.COLUMN_PRODUCT_PRICE + " - " +
-                    ProductEntry.COLUMN_PRODUCT_QUANTITY + " - " +
-                    ProductEntry.COLUMN_PRODUCT_SHELF + " - " +
-                    ProductEntry.COLUMN_PRODUCT_SUPPLIER + " - " +
-                    ProductEntry.COLUMN_PRODUCT_PHONE + " - " +
-                    ProductEntry.COLUMN_PRODUCT_DATESTAMP + "\n");
+        // Setup cursor adapter using cursor from last step
+        ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
 
-            // Figure out the index of each column
-            int idColumnIndex = cursor.getColumnIndex(ProductEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
-            int modelColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_MODEL);
-            int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
-            int shelfColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SHELF);
-            int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
-            int phoneColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHONE);
-            int datestampColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_DATESTAMP);
+        // Attach cursor adapter to the ListView
+        warehouseItems.setAdapter(adapter);
 
-            // Iterate through all the returned rows in the cursor
-            while (cursor.moveToNext()) {
-                // Use that index to extract the String or Int value of the word
-                // at the current row the cursor is on
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                String currentModel = cursor.getString(modelColumnIndex);
-                double currentPrice = cursor.getDouble(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-                String currentShelf = cursor.getString(shelfColumnIndex);
-                int currentSupplier = cursor.getInt(supplierColumnIndex);
-                String currentPhone = cursor.getString(phoneColumnIndex);
-                String currentDatestamp = cursor.getString(datestampColumnIndex);
-
-                // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
-                        currentName + " - " +
-                        currentModel + " - " +
-                        currentPrice + " - " +
-                        currentQuantity + " - " +
-                        currentShelf + " - " +
-                        currentSupplier + " - " +
-                        currentPhone + " - " +
-                        currentDatestamp));
-            }
-        } finally {
-            // Always close the cursor when you're done reading from it. This releases all its
-            // resources and makes it invalid.
-            cursor.close();
-        }
     }
 }

@@ -10,6 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/double_grid_material_design_16dp"
         android:layout_marginStart="@dimen/double_grid_material_design_16dp"
+        android:layout_marginTop="@dimen/small_grid_material_design_4dp"
         android:text="Madras Cotton Tote"
         android:textColor="@android:color/black"
         android:textSize="@dimen/font_h6_material_design_20sp"
@@ -40,6 +41,7 @@
 
     <TextView
         android:id="@+id/quantity_textview"
+        android:layout_marginTop="@dimen/small_grid_material_design_4dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/double_grid_material_design_16dp"
