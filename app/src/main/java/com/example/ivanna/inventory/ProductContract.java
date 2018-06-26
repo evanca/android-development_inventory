@@ -33,7 +33,7 @@ public final class ProductContract {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PRODUCTS);
 
-        public static final String TABLE_NAME = "products_table";
+        public static final String TABLE_NAME = "products";
         public static final String _ID = BaseColumns._ID;
         public static final String COLUMN_PRODUCT_NAME = "product_name";
         public static final String COLUMN_PRODUCT_MODEL = "product_model";

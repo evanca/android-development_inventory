@@ -1,6 +1,9 @@
 package com.example.ivanna.inventory;
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,7 +13,10 @@ import android.widget.ListView;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int PRODUCT_LOADER = 0;
+    ProductCursorAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,16 +33,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        displayDatabaseInfo();
+        // Find ListView to populate
+        ListView warehouseItems = findViewById(R.id.warehouse_listview);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items
+        View emptyView = findViewById(R.id.empty_view);
+        warehouseItems.setEmptyView(emptyView);
+
+        // Setup cursor adapter
+        mAdapter = new ProductCursorAdapter(this, null);
+
+        // Attach cursor adapter to the ListView
+        warehouseItems.setAdapter(mAdapter);
+
+        // Prepare the loader
+        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
+    // This is called when a new Loader needs to be created.
     @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
-
-    private void displayDatabaseInfo() {
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query
@@ -47,30 +65,33 @@ public class MainActivity extends AppCompatActivity {
                 ProductEntry.COLUMN_PRODUCT_PRICE,
                 ProductEntry.COLUMN_PRODUCT_QUANTITY,
                 ProductEntry.COLUMN_PRODUCT_SHELF,
-                ProductEntry.COLUMN_PRODUCT_SUPPLIER,
-                ProductEntry.COLUMN_PRODUCT_PHONE,
                 ProductEntry.COLUMN_PRODUCT_DATESTAMP};
 
-        // Perform a query on the provider using the ContentResolver.
-        Cursor cursor = getContentResolver().query(
-                ProductEntry.CONTENT_URI, // The content URI of the table
-                projection, // The columns to return
-                null, // The columns for the WHERE clause
-                null, // The values for the WHERE clause
-                null); // The sort order
+        return new CursorLoader(
+                this,
+                ProductEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                null);
+    }
 
-        // Find ListView to populate
-        ListView warehouseItems = findViewById(R.id.warehouse_listview);
+    // This method is guaranteed to be called prior to the release of the last data that was
+    // supplied for this loader.
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Swap the new cursor in.  (The framework will take care of closing the
+        // old cursor once we return.)
+        mAdapter.swapCursor(data);
+    }
 
-        // Find and set empty view on the ListView, so that it only shows when the list has 0 items
-        View emptyView = findViewById(R.id.empty_view);
-        warehouseItems.setEmptyView(emptyView);
-
-        // Setup cursor adapter using cursor from last step
-        ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
-
-        // Attach cursor adapter to the ListView
-        warehouseItems.setAdapter(adapter);
-
+    // This method is called when a previously created loader is being reset, thus making its data
+    // unavailable.
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // This is called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed.  We need to make sure we are no
+        // longer using it.
+        mAdapter.swapCursor(null);
     }
 }
