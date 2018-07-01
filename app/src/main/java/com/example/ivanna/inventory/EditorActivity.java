@@ -35,6 +35,20 @@ public class EditorActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
+        // Get the Intent that started this activity from warehouse products list item and extract the URI
+        Intent intent = getIntent();
+        Uri currentUri = intent.getData();
+
+        // If the intent does NOT contain a product content URI, then we know that we are
+        // creating a new product
+        if (currentUri == null) {
+            // This is a new product
+            setTitle(getString(R.string.add_a_new_item));
+        } else {
+            // Otherwise this is an existing product
+            setTitle(getString(R.string.edit_an_item));
+        }
+
         // Find all relevant views that we will need to read user input from
         mNameEditText = findViewById(R.id.edit_product_name);
         mModelEditText = findViewById(R.id.edit_product_model);

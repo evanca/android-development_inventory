@@ -76,6 +76,7 @@
         android:textSize="@dimen/font_body_material_design_14sp"
         app:fontFamily="@font/source_sans_pro"
         app:layout_constraintEnd_toEndOf="@+id/price_textview"
+        android:focusable="false"
         app:layout_constraintTop_toBottomOf="@+id/price_textview" />
 
 </android.support.constraint.ConstraintLayout>

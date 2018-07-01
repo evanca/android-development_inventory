@@ -14,4 +14,6 @@
     <string name="editor_insert_failed">Error with saving an item</string>
     <string name="nothing_in_the_warehouse_now">Nothing in the warehouse now...</string>
     <string name="get_started_by_adding_a_product">Get started by adding a product</string>
+    <string name="add_a_new_item">Add a new item</string>
+    <string name="edit_an_item">Edit an item</string>
 </resources>

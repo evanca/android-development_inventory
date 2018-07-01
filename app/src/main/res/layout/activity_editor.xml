@@ -33,7 +33,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/item_name"
-                    android:inputType="text"
+                    android:inputType="text"></EditText>
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>

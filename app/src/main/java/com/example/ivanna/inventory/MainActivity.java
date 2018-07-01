@@ -1,14 +1,18 @@
 package com.example.ivanna.inventory;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         // Find ListView to populate
-        ListView warehouseItems = findViewById(R.id.warehouse_listview);
+        final ListView warehouseItems = findViewById(R.id.warehouse_listview);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items
         View emptyView = findViewById(R.id.empty_view);
@@ -48,6 +52,16 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // Prepare the loader
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
+
+        warehouseItems.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, EditorActivity.class);
+                Uri currentUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
+                intent.setData(currentUri);
+                startActivity(intent);
+            }
+        });
     }
 
     // This is called when a new Loader needs to be created.
