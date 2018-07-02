@@ -16,4 +16,8 @@
     <string name="get_started_by_adding_a_product">Get started by adding a product</string>
     <string name="add_a_new_item">Add a new item</string>
     <string name="edit_an_item">Edit an item</string>
+    <string name="field_required">This field is required</string>
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
 </resources>

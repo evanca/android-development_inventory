@@ -1,10 +1,19 @@
 package com.example.ivanna.inventory;
 
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -17,7 +26,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements android.app.LoaderManager.LoaderCallbacks<android.database.Cursor> {
+
+    /**
+     * Identifier for the data loader
+     */
+    private static final int EXISTING_PRODUCT_LOADER = 0;
+
+    /**
+     * Content URI for the existing item (null if it's a new item)
+     */
+    private Uri mCurrentUri;
 
     private EditText mNameEditText;
     private EditText mModelEditText;
@@ -26,9 +45,26 @@ public class EditorActivity extends AppCompatActivity {
     private EditText mShelfEditText;
     private EditText mSupplierEditText;
     private EditText mPhoneEditText;
+
     private double price;
     private int quantity;
     private int supplierCode;
+
+    /**
+     * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
+     */
+    private boolean mProductHasChanged = false;
+
+    /**
+     * OnTouchListener that listens for any user touches on a View
+     */
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mProductHasChanged = true;
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,16 +73,19 @@ public class EditorActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity from warehouse products list item and extract the URI
         Intent intent = getIntent();
-        Uri currentUri = intent.getData();
+        mCurrentUri = intent.getData();
 
         // If the intent does NOT contain a product content URI, then we know that we are
         // creating a new product
-        if (currentUri == null) {
+        if (mCurrentUri == null) {
             // This is a new product
             setTitle(getString(R.string.add_a_new_item));
         } else {
             // Otherwise this is an existing product
             setTitle(getString(R.string.edit_an_item));
+
+            // Prepare the loader
+            getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
@@ -76,16 +115,36 @@ public class EditorActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Code here executes on main thread after user presses button
-                insertProduct();
-                finish();
+
+                if (mNameEditText.getText().toString().isEmpty()) {
+                    mNameEditText.setError(getString(R.string.field_required));
+                } else if (mModelEditText.getText().toString().isEmpty()) {
+                    mModelEditText.setError(getString(R.string.field_required));
+                } else {
+                    saveProduct();
+                    finish();
+                }
             }
         });
+
+        // Setup OnTouchListeners on all the input fields, so we can determine if the user
+        // has touched or modified them. This will let us know if there are unsaved changes
+        // or not, if the user tries to leave the editor without saving.
+
+        mNameEditText.setOnTouchListener(mTouchListener);
+        mModelEditText.setOnTouchListener(mTouchListener);
+        mPriceEditText.setOnTouchListener(mTouchListener);
+        mQuantityEditText.setOnTouchListener(mTouchListener);
+        mShelfEditText.setOnTouchListener(mTouchListener);
+        mSupplierEditText.setOnTouchListener(mTouchListener);
+        mPhoneEditText.setOnTouchListener(mTouchListener);
+
     }
 
     /**
-     * Get user input from editor and save new item into database
+     * Get user input from editor and save item into database
      */
-    private void insertProduct() {
+    private void saveProduct() {
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
@@ -121,19 +180,216 @@ public class EditorActivity extends AppCompatActivity {
         values.put(ProductEntry.COLUMN_PRODUCT_PHONE, phoneString);
         values.put(ProductEntry.COLUMN_PRODUCT_DATESTAMP, datestampString);
 
-        // Insert a new product into the provider, returning the content URI for the new product
-        Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
+        // Determine if this is a new or existing item / product by checking if current URI is null or not
+        if (mCurrentUri == null) {
+            // This is a NEW item, so insert a new item into the provider,
+            // returning the content URI for the new item.
+            Uri newUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);
 
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
-            // If the new content URI is null, then there was an error with insertion
-            Toast.makeText(this, getString(R.string.editor_insert_failed),
-                    Toast.LENGTH_SHORT).show();
+            // Show a toast message depending on whether or not the insertion was successful.
+            if (newUri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
-            // Otherwise, the insertion was successful and we can display a toast
-            Toast.makeText(this, getString(R.string.editor_insert_successful),
-                    Toast.LENGTH_SHORT).show();
+            // Otherwise this is an EXISTING product, so update the product with content URI
+            // and pass in the new ContentValues. Pass in null for the selection and selection args
+            // because current URI will already identify the correct row in the database that
+            // we want to modify.
+            int rowsAffected = getContentResolver().update(mCurrentUri, values, null, null);
+
+            // Show a toast message depending on whether or not the update was successful.
+            if (rowsAffected == 0) {
+                // If no rows were affected, then there was an error with the update.
+                Toast.makeText(this, getString(R.string.editor_insert_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the update was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
+    /**
+     * This method is called when the back button is pressed.
+     */
+    @Override
+    public void onBackPressed() {
+
+        Log.i("BACK PRESSED YAAAY", "BACK BACK");
+
+        // If the item hasn't changed, continue with handling back button press
+        if (!mProductHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+
+        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+        // Create a click listener to handle the user confirming that changes should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // User clicked "Discard" button, close the current activity.
+                        finish();
+                    }
+                };
+
+        // Show dialog that there are unsaved changes
+        showUnsavedChangesDialog(discardButtonClickListener);
+    }
+
+    // Respond to a click on the "Up" arrow button in the app bar
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                // If the item hasn't changed, continue with navigating up to parent activity.
+                if (!mProductHasChanged) {
+                    NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                    return true;
+                }
+
+                // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+                // Create a click listener to handle the user confirming that
+                // changes should be discarded.
+                DialogInterface.OnClickListener discardButtonClickListener =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                // User clicked "Discard" button, navigate to parent activity.
+                                NavUtils.navigateUpFromSameTask(EditorActivity.this);
+                            }
+                        };
+
+                // Show a dialog that notifies the user they have unsaved changes
+                showUnsavedChangesDialog(discardButtonClickListener);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Instantiate and return a new Loader for the given ID.
+     */
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String[] projection = {
+                ProductEntry._ID,
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductEntry.COLUMN_PRODUCT_MODEL,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_QUANTITY,
+                ProductEntry.COLUMN_PRODUCT_SHELF,
+                ProductEntry.COLUMN_PRODUCT_SUPPLIER,
+                ProductEntry.COLUMN_PRODUCT_PHONE};
+
+        return new CursorLoader(
+                this,
+                mCurrentUri,
+                projection,
+                null,
+                null,
+                null);
+    }
+
+    /**
+     * Called when a previously created loader has finished its load.  Note
+     * that normally an application is <em>not</em> allowed to commit fragment
+     * transactions while in this call, since it can happen after an
+     * activity's state is saved.
+     */
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
+        // Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+
+        // Proceed with moving to the first row of the cursor and reading data from it
+        // (This should be the only row in the cursor)
+        if (cursor.moveToFirst()) {
+            // Figure out the index of each column
+            int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
+            int modelColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_MODEL);
+            int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+            int shelfColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SHELF);
+            int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SUPPLIER);
+            int phoneColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PHONE);
+
+            // Extract properties from cursor
+            String currentName = cursor.getString(nameColumnIndex);
+            String currentModel = cursor.getString(modelColumnIndex);
+            double currentPrice = cursor.getDouble(priceColumnIndex);
+            int currentQuantity = cursor.getInt(quantityColumnIndex);
+            String currentShelf = cursor.getString(shelfColumnIndex);
+            int currentSupplier = cursor.getInt(supplierColumnIndex);
+            String currentPhone = cursor.getString(phoneColumnIndex);
+
+            // Update the views on the screen with the values from the database
+            mNameEditText.setText(currentName);
+            mModelEditText.setText(currentModel);
+            mPriceEditText.setText(String.valueOf(currentPrice));
+            mQuantityEditText.setText(String.valueOf(currentQuantity));
+            mShelfEditText.setText(currentShelf);
+            mSupplierEditText.setText(String.valueOf(currentSupplier));
+            mPhoneEditText.setText(currentPhone);
+        }
+    }
+
+    /**
+     * Called when a previously created loader is being reset, and thus
+     * making its data unavailable.  The application should at this point
+     * remove any references it has to the Loader's data.
+     *
+     * @param loader The Loader that is being reset.
+     */
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        // If the loader is invalidated, clear out all the data from the input fields.
+        mNameEditText.setText("");
+        mModelEditText.setText("");
+        mPriceEditText.setText("");
+        mQuantityEditText.setText("");
+        mShelfEditText.setText("");
+        mSupplierEditText.setText("");
+        mPhoneEditText.setText("");
+    }
+
+    /**
+     * Show a dialog that warns the user there are unsaved changes that will be lost
+     * if they continue leaving the editor.
+     */
+    private void showUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the product.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 }
