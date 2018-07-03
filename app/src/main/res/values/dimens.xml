@@ -7,4 +7,5 @@
     <dimen name="font_subtitle_18sp">18sp</dimen>
     <dimen name="font_h6_material_design_20sp">20sp</dimen>
     <dimen name="small_grid_material_design_4dp">4dp</dimen>
+    <dimen name="icon_height_28dp">28dp</dimen>
 </resources>

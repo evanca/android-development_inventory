@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -67,6 +67,24 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     };
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Add a "Trash" button to menu
+        getMenuInflater().inflate(R.menu.menu_trash, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        // If this is a new product, hide the "Trash" menu item.
+        if (mCurrentUri == null) {
+            MenuItem menuItem = menu.findItem(R.id.trash);
+            menuItem.setVisible(false);
+        }
+        return true;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
@@ -80,6 +98,11 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         if (mCurrentUri == null) {
             // This is a new product
             setTitle(getString(R.string.add_a_new_item));
+
+            // Invalidate the options menu, so the "Delete" menu option can be hidden.
+            // (It doesn't make sense to delete an item that hasn't been created yet.)
+            invalidateOptionsMenu();
+
         } else {
             // Otherwise this is an existing product
             setTitle(getString(R.string.edit_an_item));
@@ -222,8 +245,6 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     @Override
     public void onBackPressed() {
 
-        Log.i("BACK PRESSED YAAAY", "BACK BACK");
-
         // If the item hasn't changed, continue with handling back button press
         if (!mProductHasChanged) {
             super.onBackPressed();
@@ -249,7 +270,9 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-
+            case R.id.trash:
+                showDeleteConfirmationDialog();
+                return true;
             case android.R.id.home:
                 // If the item hasn't changed, continue with navigating up to parent activity.
                 if (!mProductHasChanged) {
@@ -391,5 +414,59 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the product.
+                deleteProduct();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the product.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the product in the database.
+     */
+    private void deleteProduct() {
+        // Only perform the delete if this is an existing item / product.
+        if (mCurrentUri != null) {
+            // Call the ContentResolver to delete the item at the given content URI.
+
+            // Pass in null for the selection and selection args because the mCurrentUri
+            // content URI already identifies the item that we want.
+            int rowsDeleted = getContentResolver().delete(mCurrentUri, null, null);
+
+            // Show a toast message depending on whether or not the delete was successful.
+            if (rowsDeleted == 0) {
+                // If no rows were deleted, then there was an error with the delete.
+                Toast.makeText(this, getString(R.string.editor_delete_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_delete_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // Close the activity
+        finish();
     }
 }

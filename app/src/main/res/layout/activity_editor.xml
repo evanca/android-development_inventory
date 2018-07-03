@@ -17,7 +17,7 @@
 
             <ImageView
                 android:layout_width="@dimen/layout_width_small_108dp"
-                android:layout_height="28dp"
+                android:layout_height="@dimen/icon_height_28dp"
                 android:layout_gravity="bottom"
                 android:src="@drawable/information_outline"
                 android:tint="@color/colorPrimaryDark" />
@@ -67,7 +67,7 @@
 
             <ImageView
                 android:layout_width="@dimen/layout_width_small_108dp"
-                android:layout_height="28dp"
+                android:layout_height="@dimen/icon_height_28dp"
                 android:layout_gravity="bottom"
                 android:src="@drawable/cart"
                 android:tint="@color/colorPrimaryDark" />
@@ -133,7 +133,7 @@
 
             <ImageView
                 android:layout_width="@dimen/layout_width_small_108dp"
-                android:layout_height="28dp"
+                android:layout_height="@dimen/icon_height_28dp"
                 android:layout_gravity="bottom"
                 android:src="@drawable/clipboard_text"
                 android:tint="@color/colorPrimaryDark" />
