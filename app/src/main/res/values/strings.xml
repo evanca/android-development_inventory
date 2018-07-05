@@ -20,7 +20,6 @@
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <string name="discard">Discard</string>
     <string name="keep_editing">Keep Editing</string>
-
     <string name="delete">Delete</string>
     <string name="editor_delete_successful">Item deleted</string>
     <string name="editor_delete_failed">Error with deleting an item</string>
@@ -30,5 +29,6 @@
     <string name="delete_all_items_successful">The data was deleted</string>
     <string name="delete_all_items_failed">Error with deleting the data</string>
     <string name="warning">Warning!</string>
+    <string name="no_more_items">No more items left on stock!</string>
 
 </resources>

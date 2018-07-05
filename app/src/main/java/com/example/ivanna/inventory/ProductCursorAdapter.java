@@ -1,12 +1,19 @@
 package com.example.ivanna.inventory;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.ivanna.inventory.ProductContract.ProductEntry;
 
 import java.text.DecimalFormat;
 
@@ -31,28 +38,29 @@ public class ProductCursorAdapter extends CursorAdapter {
     // The bindView method is used to bind all data to a given view
     // such as setting the text on a TextView.
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         // Find fields to populate in inflated template
         TextView name = view.findViewById(R.id.name_textview);
         TextView info = view.findViewById(R.id.info_textview);
         TextView date = view.findViewById(R.id.date_textview);
 
-        TextView quantity = view.findViewById(R.id.quantity_textview);
+        final TextView quantity = view.findViewById(R.id.quantity_textview);
         TextView price = view.findViewById(R.id.price_textview);
 
         // Figure out the index of each column
-        int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
-        int modelColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_MODEL);
-        int priceColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
-        int shelfColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_SHELF);
-        int datestampColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_DATESTAMP);
+        final int idColumnIndex = cursor.getInt(cursor.getColumnIndex(ProductEntry._ID));
+        int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_NAME);
+        int modelColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_MODEL);
+        int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
+        int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+        int shelfColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_SHELF);
+        int datestampColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_DATESTAMP);
 
         // Extract properties from cursor
         String currentName = cursor.getString(nameColumnIndex);
         String currentModel = cursor.getString(modelColumnIndex);
         double currentPrice = cursor.getDouble(priceColumnIndex);
-        int currentQuantity = cursor.getInt(quantityColumnIndex);
+        final int currentQuantity = cursor.getInt(quantityColumnIndex);
         String currentShelf = cursor.getString(shelfColumnIndex);
         String currentDatestamp = cursor.getString(datestampColumnIndex);
 
@@ -66,5 +74,30 @@ public class ProductCursorAdapter extends CursorAdapter {
         // Format the price to show two zeros after period
         DecimalFormat df = new DecimalFormat("0.00");
         price.setText("x " + String.valueOf(df.format(currentPrice)));
+
+        Button quickSellButton = view.findViewById(R.id.button);
+        quickSellButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Get URI reference of this particular product:
+                Uri u = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, idColumnIndex);
+
+                // Update the quantity value in database via ContentResolver:
+                if (currentQuantity >= 1) {
+                    // Decrease quantity by one:
+                    int updatedQuantity = currentQuantity - 1;
+
+                    ContentValues contentValues = new ContentValues();
+                    contentValues.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, updatedQuantity);
+                    int i = context.getContentResolver().update(u, contentValues, null, null);
+
+                } else {
+                    Toast.makeText(context, context.getString(R.string.no_more_items),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
 }
