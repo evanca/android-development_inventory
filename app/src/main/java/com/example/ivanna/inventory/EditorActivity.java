@@ -162,6 +162,38 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneEditText.setOnTouchListener(mTouchListener);
 
+        // Decrease quantity by one when "Minus" button is pressed
+        // No negative values allowed
+        Button minusButton = findViewById(R.id.minus_button);
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String quantityString = mQuantityEditText.getText().toString().trim();
+                if (!quantityString.isEmpty()) {
+                    quantity = Integer.parseInt(quantityString);
+                } else quantity = 0;
+                if (quantity > 0) {
+                    mQuantityEditText.setText(String.valueOf(quantity - 1));
+                }
+            }
+        });
+
+        // Increase quantity by one when "Plus" button is pressed
+        Button plusButton = findViewById(R.id.plus_button);
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String quantityString = mQuantityEditText.getText().toString().trim();
+                if (!quantityString.isEmpty()) {
+                    quantity = Integer.parseInt(quantityString);
+                } else quantity = 0;
+                if (quantity >= 0) {
+                    mQuantityEditText.setText(String.valueOf(quantity + 1));
+                }
+            }
+        });
     }
 
     /**
