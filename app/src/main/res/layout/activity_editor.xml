@@ -132,6 +132,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/call_supplier"
                 android:layout_width="@dimen/layout_width_small_108dp"
                 android:layout_height="@dimen/icon_height_28dp"
                 android:layout_gravity="bottom"

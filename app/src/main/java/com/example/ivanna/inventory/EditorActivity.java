@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
@@ -194,6 +195,25 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
                 }
             }
         });
+
+        // If there is a supplier phone provided, initiate a phone call on button click:
+        ImageView callSupplier = findViewById(R.id.call_supplier);
+        callSupplier.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String phoneString = mPhoneEditText.getText().toString().trim();
+                if (!phoneString.isEmpty()) {
+
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" + phoneString));
+                    if (intent.resolveActivity(getPackageManager()) != null) {
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+
     }
 
     /**
