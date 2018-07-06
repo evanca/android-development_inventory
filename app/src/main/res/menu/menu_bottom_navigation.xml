@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/editor_nav"
+        android:icon="@drawable/playlist_plus"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/search_nav"
+        android:icon="@drawable/database_search"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/main_nav"
+        android:icon="@drawable/home_outline"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/stats_nav"
+        android:icon="@drawable/chart_bar"
+        android:title=""
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/settings_nav"
+        android:icon="@drawable/tune"
+        android:title=""
+        app:showAsAction="always" />
+
+</menu>
