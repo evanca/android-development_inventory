@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
@@ -31,25 +30,24 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         // Set up bottom navigation icons to switch between top-level content views with a single tap:
-        BottomNavigationView mBottomNav = findViewById(R.id.bottom_navigation);
+        final BottomNavigationView mBottomNav = findViewById(R.id.bottom_navigation);
+        mBottomNav.setSelectedItemId(R.id.main_nav);
+        BottomNavigationViewHelper.disableShiftMode(mBottomNav);
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.editor_nav:
-                        Intent intent = new Intent(MainActivity.this, EditorActivity.class);
-                        startActivity(intent);
+                        Intent open_editor = new Intent(MainActivity.this, EditorActivity.class);
+                        startActivity(open_editor);
+                    case R.id.search_nav:
+                    case R.id.main_nav:
+                    case R.id.stats_nav:
+                    case R.id.settings_nav:
+                        Intent open_settings = new Intent(MainActivity.this, SettingsActivity.class);
+                        startActivity(open_settings);
                 }
                 return true;
-            }
-        });
-
-        Button settingsButton = findViewById(R.id.button_settings);
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
             }
         });
 
