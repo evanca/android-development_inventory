@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().hide();
+
         // Set up bottom navigation icons to switch between top-level content views with a single tap:
         final BottomNavigationView mBottomNav = findViewById(R.id.bottom_navigation);
         mBottomNav.setSelectedItemId(R.id.main_nav);
@@ -40,12 +42,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                     case R.id.editor_nav:
                         Intent open_editor = new Intent(MainActivity.this, EditorActivity.class);
                         startActivity(open_editor);
+                        break;
                     case R.id.search_nav:
                     case R.id.main_nav:
                     case R.id.stats_nav:
                     case R.id.settings_nav:
                         Intent open_settings = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(open_settings);
+                        break;
                 }
                 return true;
             }
