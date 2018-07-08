@@ -30,5 +30,13 @@
     <string name="delete_all_items_failed">Error with deleting the data</string>
     <string name="warning">Warning!</string>
     <string name="no_more_items">No more items left on stock!</string>
-
+    <!-- Shown above search results when we receive a search request. -->
+    <plurals name="search_results">
+        <item quantity="one">%1$d result for \"%2$s\": </item>
+        <item quantity="other">%1$d results for \"%2$s\": </item>
+    </plurals>
+    <!-- Search failure message. -->
+    <string name="no_results">No results found for \"%s\"</string>
+    <string name="search_instructions">Search by product name or model</string>
+    <string name="search">Search</string>
 </resources>

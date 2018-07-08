@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/search_instructions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/double_grid_material_design_16dp"
+        android:text="@string/search_instructions"
+        android:textSize="@dimen/font_subtitle_18sp" />
 
     <ListView
         android:id="@+id/warehouse_listview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent" />
 
     <!-- Empty view START -->
     <LinearLayout
@@ -19,12 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="@dimen/layout_width_small_108dp"
@@ -45,4 +44,10 @@
     </LinearLayout>
     <!-- Empty view END -->
 
-</android.support.constraint.ConstraintLayout>
+    <!-- Dummy view to remove an empty view if no products were found via search -->
+    <View
+        android:id="@+id/invisible_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
