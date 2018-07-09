@@ -75,6 +75,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         DecimalFormat df = new DecimalFormat("0.00");
         price.setText("x " + String.valueOf(df.format(currentPrice)));
 
+        // TODO: Fix problem with quickSellButton in a search results
         Button quickSellButton = view.findViewById(R.id.button);
         quickSellButton.setOnClickListener(new View.OnClickListener() {
             @Override
