@@ -38,7 +38,7 @@ public class ProductCursorAdapter extends CursorAdapter {
     // The bindView method is used to bind all data to a given view
     // such as setting the text on a TextView.
     @Override
-    public void bindView(View view, final Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         // Find fields to populate in inflated template
         TextView name = view.findViewById(R.id.name_textview);
         TextView info = view.findViewById(R.id.info_textview);
@@ -75,7 +75,6 @@ public class ProductCursorAdapter extends CursorAdapter {
         DecimalFormat df = new DecimalFormat("0.00");
         price.setText("x " + String.valueOf(df.format(currentPrice)));
 
-        // TODO: Fix problem with quickSellButton in a search results
         Button quickSellButton = view.findViewById(R.id.button);
         quickSellButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +85,11 @@ public class ProductCursorAdapter extends CursorAdapter {
 
                 // Update the quantity value in database via ContentResolver:
                 if (currentQuantity >= 1) {
+
+                    // Shows updated q-ty just before the activity of search results goes back to a full list of items.
+                    // Without this line the update (in a search results) is not visible to a user (is too fast)
+                    quantity.setText(String.valueOf(currentQuantity - 1));
+
                     // Decrease quantity by one:
                     int updatedQuantity = currentQuantity - 1;
 
