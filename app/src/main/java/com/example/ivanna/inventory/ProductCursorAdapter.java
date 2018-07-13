@@ -38,7 +38,7 @@ public class ProductCursorAdapter extends CursorAdapter {
     // The bindView method is used to bind all data to a given view
     // such as setting the text on a TextView.
     @Override
-    public void bindView(View view, final Context context, final Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         // Find fields to populate in inflated template
         TextView name = view.findViewById(R.id.name_textview);
         TextView info = view.findViewById(R.id.info_textview);

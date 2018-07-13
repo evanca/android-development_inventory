@@ -76,6 +76,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         prepareLoader();
                         break;
                     case R.id.stats_nav:
+                        Intent open_stats = new Intent(MainActivity.this, StatsActivity.class);
+                        startActivity(open_stats);
+                        break;
                     case R.id.settings_nav:
                         Intent open_settings = new Intent(MainActivity.this, SettingsActivity.class);
                         startActivity(open_settings);

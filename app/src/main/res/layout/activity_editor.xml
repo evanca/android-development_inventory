@@ -10,9 +10,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="@dimen/quadruple_grid_material_design_32dp">
+        android:padding="@dimen/quadruple_grid_material_design_32dp">
 
         <LinearLayout
+            android:layout_marginTop="@dimen/double_grid_material_design_16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
