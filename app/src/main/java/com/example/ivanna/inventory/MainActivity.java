@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 ProductEntry.COLUMN_PRODUCT_PRICE,
                 ProductEntry.COLUMN_PRODUCT_QUANTITY,
                 ProductEntry.COLUMN_PRODUCT_SHELF,
+                ProductEntry.COLUMN_PRODUCT_SUPPLIER,
                 ProductEntry.COLUMN_PRODUCT_DATESTAMP};
 
         return new CursorLoader(
@@ -202,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         ProductEntry.COLUMN_PRODUCT_PRICE,
                         ProductEntry.COLUMN_PRODUCT_QUANTITY,
                         ProductEntry.COLUMN_PRODUCT_SHELF,
+                        ProductEntry.COLUMN_PRODUCT_SUPPLIER,
                         ProductEntry.COLUMN_PRODUCT_DATESTAMP},
 
                 // Search by product name or product model

@@ -29,6 +29,7 @@ public final class ProductContract {
     }
 
     /* Inner class that defines the table contents */
+    // Note if names change, we need to manually check if StatsActivity raw queries needs to be updated!
     public static class ProductEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PRODUCTS);

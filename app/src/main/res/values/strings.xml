@@ -44,4 +44,7 @@
     <string name="total_stock_value">Total stock value:</string>
     <string name="supplier_count">Supplier count:</string>
     <string name="out_of_stock">Out of stock:</string>
+    <string name="loading_stats_failed">Error with loading stats</string>
+    <string name="getting_data_stats">Getting data stats...</string>
+    <string name="models">models</string>
 </resources>
