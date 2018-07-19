@@ -4,9 +4,11 @@ import android.app.LoaderManager;
 import android.app.ProgressDialog;
 import android.content.CursorLoader;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -24,6 +26,9 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
     private Cursor noStockCursor;
     private ProgressDialog dialog;
     private ProductDbHelper mDbHelper;
+    String maxQuantity;
+    String currency;
+    String checkCustomCurrency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +36,30 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         setContentView(R.layout.activity_stats);
         setTitle(R.string.title_stats);
 
+        // Retrieve values from a shared preferences
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        maxQuantity = sharedPrefs.getString(
+                getString(R.string.settings_max_quantity_key),
+                getString(R.string.settings_max_quantity_default));
+        currency = sharedPrefs.getString(
+                getString(R.string.settings_currency_key),
+                getString(R.string.settings_currency_EUR));
+        checkCustomCurrency = sharedPrefs.getString(
+                getString(R.string.settings_currency_key_custom),
+                getString(R.string.settings_currency_EUR));
+
+        // If custom currency is set, use it instead of a pre-defined currency:
+        if (checkCustomCurrency != null && !checkCustomCurrency.isEmpty()) {
+            currency = checkCustomCurrency;
+        }
+
         // Here we need to use an SQLiteOpenHelper because Content Providers don't support rawQuery()
         mDbHelper = new ProductDbHelper(this);
         new rawQueryAsyncTask().execute();
 
         ProgressBar pieChart = findViewById(R.id.stats_progressbar);
 
-        // Prepare the loader
+        // Prepare the loader to count the number of items on stock
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
@@ -62,7 +84,7 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         countNumberOfGoods = data.getCount();
         TextView numberOfGoods = findViewById(R.id.number_of_goods);
-        numberOfGoods.setText(String.valueOf(countNumberOfGoods));
+        numberOfGoods.setText(String.valueOf(countNumberOfGoods) + " / " + maxQuantity);
     }
 
     @Override
@@ -79,8 +101,7 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
                 sumStockValue = stockValueCursor.getDouble(0);
             }
             TextView stockValue = findViewById(R.id.stock_value_text);
-            // TODO: Make currency a preference
-            stockValue.setText(String.valueOf(sumStockValue) + " EUR");
+            stockValue.setText(String.valueOf(sumStockValue) + " " + currency);
         }
 
         if (supplierCountCursor == null) {

@@ -3,9 +3,40 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="@string/settings_title">
 
+    <EditTextPreference
+        android:defaultValue="@string/settings_max_quantity_default"
+        android:inputType="number"
+        android:key="pref_max_quantity"
+        android:title="@string/settings_max_quantity" />
+
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/entries"
+        android:entryValues="@array/entry_values"
+        android:key="@string/settings_currency_key"
+        android:title="@string/settings_currency" />
+
+    <EditTextPreference
+        android:id="@+id/currency_edit_text_preference"
+        android:enabled="false"
+        android:inputType="textCapCharacters"
+        android:key="@string/settings_currency_key_custom"
+        android:maxLength="3"
+        android:title="@string/settings_currency_custom" />
+
+    <EditTextPreference
+        android:defaultValue="1"
+        android:inputType="number"
+        android:key="@string/settings_step_key"
+        android:title="@string/settings_step" />
+
     <Preference
-        android:key="deleteEverythingPreferenceKey"
+        android:key="@string/settings_delete_all_key"
         android:title="@string/delete_all_items_title"
         android:widgetLayout="@layout/button_settings" />
+
+    <Preference
+        android:key="@string/settings_credits_key"
+        android:title="@string/settings_credits" />
 
 </PreferenceScreen>

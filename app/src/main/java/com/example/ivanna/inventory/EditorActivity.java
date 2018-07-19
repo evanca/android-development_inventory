@@ -5,9 +5,11 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +52,8 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     private double price;
     private int quantity;
     private int supplierCode;
+
+    private int step;
 
     /**
      * Boolean flag that keeps track of whether the item has been edited (true) or not (false)
@@ -163,6 +167,10 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
         mSupplierEditText.setOnTouchListener(mTouchListener);
         mPhoneEditText.setOnTouchListener(mTouchListener);
 
+        // Get step number value from SharedPreferences:
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        step = Integer.parseInt(sharedPrefs.getString(getString(R.string.settings_step_key), "1"));
+
         // Decrease quantity by one when "Minus" button is pressed
         // No negative values allowed
         Button minusButton = findViewById(R.id.minus_button);
@@ -174,8 +182,11 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
                 if (!quantityString.isEmpty()) {
                     quantity = Integer.parseInt(quantityString);
                 } else quantity = 0;
-                if (quantity > 0) {
-                    mQuantityEditText.setText(String.valueOf(quantity - 1));
+                if (quantity > 0 && quantity >= step) {
+                    mQuantityEditText.setText(String.valueOf(quantity - step));
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.not_enough_items),
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -191,7 +202,7 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
                     quantity = Integer.parseInt(quantityString);
                 } else quantity = 0;
                 if (quantity >= 0) {
-                    mQuantityEditText.setText(String.valueOf(quantity + 1));
+                    mQuantityEditText.setText(String.valueOf(quantity + step));
                 }
             }
         });

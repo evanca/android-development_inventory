@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="entries">
+        <item>@string/settings_currency_EUR</item>
+        <item>@string/settings_currency_USD</item>
+        <item>@string/settings_currency_JPY</item>
+        <item>@string/settings_currency_GBP</item>
+        <item>@string/settings_currency_custom_title</item>
+    </string-array>
+    <string-array name="entry_values">
+        <item>@string/settings_currency_EUR</item>
+        <item>@string/settings_currency_USD</item>
+        <item>@string/settings_currency_JPY</item>
+        <item>@string/settings_currency_GBP</item>
+        <item>@string/settings_currency_custom_title</item>
+    </string-array>
+</resources>

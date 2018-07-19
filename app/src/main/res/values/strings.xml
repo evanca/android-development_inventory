@@ -31,6 +31,7 @@
     <string name="delete_all_items_failed">Error with deleting the data</string>
     <string name="warning">Warning!</string>
     <string name="no_more_items">No more items left on stock!</string>
+    <string name="not_enough_items">Not enough items on stock!</string>
     <!-- Shown above search results when we receive a search request. -->
     <plurals name="search_results">
         <item quantity="one">%1$d result for \"%2$s\": </item>
@@ -47,4 +48,27 @@
     <string name="loading_stats_failed">Error with loading stats</string>
     <string name="getting_data_stats">Getting data stats...</string>
     <string name="models">models</string>
+    <string name="settings_max_quantity">Stock capacity in pcs</string>
+    <string name="settings_max_quantity_key" translatable="false">pref_max_quantity</string>
+    <string name="settings_max_quantity_default">10000</string>
+    <string name="settings_max_quantity_error">Please choose number up to 999999 pcs!</string>
+    <string name="settings_currency">Currency for prices</string>
+    <string name="settings_currency_custom">Custom currency</string>
+    <string name="settings_currency_key" translatable="false">pref_currency</string>
+    <string name="settings_currency_key_custom" translatable="false">pref_currency_custom</string>
+    <string name="settings_currency_EUR" translatable="false">EUR</string>
+    <string name="settings_currency_USD" translatable="false">USD</string>
+    <string name="settings_currency_JPY" translatable="false">JPY</string>
+    <string name="settings_currency_GBP" translatable="false">GBP</string>
+    <string name="settings_currency_custom_title">Custom</string>
+    <string name="settings_credits">Credits ©</string>
+    <string name="settings_credits_no_symbol">Credits</string>
+    <string name="settings_credits_key" translatable="false">pref_credits</string>
+    <string name="credits_summary">Please don’t use this original work (e.g., code, language, formulas, etc.) in your assignments, projects, or assessments, as it will be a violation of Udacity Honor Code &amp; Code of Conduct.</string>
+    <string name="OK">OK</string>
+    <string name="settings_step">Step of quantity increase</string>
+    <string name="settings_step_key" translatable="false">pref_step</string>
+    <string name="settings_step_default">1</string>
+    <string name="settings_delete_all_key">delete_everything_key</string>
+
 </resources>
