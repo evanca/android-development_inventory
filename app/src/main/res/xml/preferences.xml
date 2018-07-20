@@ -18,7 +18,6 @@
 
     <EditTextPreference
         android:id="@+id/currency_edit_text_preference"
-        android:enabled="false"
         android:inputType="textCapCharacters"
         android:key="@string/settings_currency_key_custom"
         android:maxLength="3"

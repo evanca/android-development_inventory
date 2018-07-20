@@ -63,10 +63,23 @@ public class SettingsActivity extends AppCompatActivity {
 
     public static class InventoryPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
+        EditTextPreference editTextPreference;
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
+
+            editTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_currency_key_custom));
+
+            // If pre-defined currency is already selected, enable EditTextPreference:
+            SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            String currency = sharedPrefs.getString(
+                    getString(R.string.settings_currency_key),
+                    getString(R.string.settings_currency_EUR));
+            if (currency.equals(getString(R.string.settings_currency_custom_title))) {
+                editTextPreference.setEnabled(true);
+            }
 
             final ListPreference listPreference = (ListPreference) findPreference(getString(R.string.settings_currency_key));
 
@@ -75,7 +88,6 @@ public class SettingsActivity extends AppCompatActivity {
                 public boolean onPreferenceChange(Preference preference, Object value) {
 
                     int index = listPreference.findIndexOfValue(value.toString());
-                    EditTextPreference editTextPreference = (EditTextPreference) findPreference(getString(R.string.settings_currency_key_custom));
 
                     if (index != -1) {
                         // Check if a "Custom" option is selected

@@ -19,6 +19,8 @@ import com.example.ivanna.inventory.ProductContract.ProductEntry;
 public class StatsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PRODUCT_LOADER = 0;
+    String maxQuantity;
+    String currency;
     private int countNumberOfGoods = 0;
     private double sumStockValue = 0.00;
     private Cursor stockValueCursor;
@@ -26,9 +28,6 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
     private Cursor noStockCursor;
     private ProgressDialog dialog;
     private ProductDbHelper mDbHelper;
-    String maxQuantity;
-    String currency;
-    String checkCustomCurrency;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +43,17 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         currency = sharedPrefs.getString(
                 getString(R.string.settings_currency_key),
                 getString(R.string.settings_currency_EUR));
-        checkCustomCurrency = sharedPrefs.getString(
-                getString(R.string.settings_currency_key_custom),
-                getString(R.string.settings_currency_EUR));
 
         // If custom currency is set, use it instead of a pre-defined currency:
-        if (checkCustomCurrency != null && !checkCustomCurrency.isEmpty()) {
+        if (currency.equals(getString(R.string.settings_currency_custom_title))) {
+            String checkCustomCurrency = sharedPrefs.getString(
+                    getString(R.string.settings_currency_key_custom),
+                    getString(R.string.settings_currency_EUR));
             currency = checkCustomCurrency;
+            // If user forgot to input a custom value, just use the default:
+            if (currency.isEmpty()) {
+                currency = getString(R.string.settings_currency_EUR);
+            }
         }
 
         // Here we need to use an SQLiteOpenHelper because Content Providers don't support rawQuery()
