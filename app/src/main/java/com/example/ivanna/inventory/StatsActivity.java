@@ -60,8 +60,6 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         mDbHelper = new ProductDbHelper(this);
         new rawQueryAsyncTask().execute();
 
-        ProgressBar pieChart = findViewById(R.id.stats_progressbar);
-
         // Prepare the loader to count the number of items on stock
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
@@ -88,6 +86,13 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         countNumberOfGoods = data.getCount();
         TextView numberOfGoods = findViewById(R.id.number_of_goods);
         numberOfGoods.setText(String.valueOf(countNumberOfGoods) + " / " + maxQuantity);
+
+        // Calculate the fullness of the warehouse to show in our pie chart:
+        ProgressBar pieChart = findViewById(R.id.stats_progressbar);
+        double d = (double) countNumberOfGoods / (double) Integer.valueOf(maxQuantity);
+        int progress = (int) (d * 100);
+        pieChart.setProgress(progress);
+
     }
 
     @Override
