@@ -10,7 +10,9 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -23,8 +25,55 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public void deleteEverything(View v) {
+    public void checkPinCode(View v) {
+        // Get the pin code from SharedPreferences
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        final String pinCode = sharedPref.getString(getString(R.string.pin_secret_key), null);
 
+        // Pin validation dialog starts here
+        LayoutInflater li = LayoutInflater.from(this);
+        View dialogView = li.inflate(R.layout.dialog_enter_pin, null);
+        AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
+        mDialogBuilder.setView(dialogView);
+        final EditText pinEnter = dialogView.findViewById(R.id.pin_enter);
+        mDialogBuilder.setCancelable(false);
+        mDialogBuilder.setPositiveButton(R.string.OK,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do nothing here because we override this button later
+                    }
+                });
+        final AlertDialog dialog = mDialogBuilder.create();
+        dialog.show();
+        //Overriding the handler immediately after show:
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get pin value
+                String pin = pinEnter.getText().toString();
+                if (pin.isEmpty() || pin.length() < 4) {
+                    pinEnter.setError(getString(R.string.pin_input_error));
+                } else {
+                    // Continue with pin validation
+                    if (!pin.equals(pinCode)) {
+                        // PIN does not match, so show error and close dialog
+                        Toast.makeText(SettingsActivity.this, getString(R.string.pin_incorrect),
+                                Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                    } else {
+                        // PIN is OK, close this dialog and continue with delete method
+                        dialog.dismiss();
+                        deleteEverything(v);
+                    }
+                }
+
+            }
+        });
+    }
+
+    public void deleteEverything(View v) {
+        // Next dialog after pin validation starts here
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.delete_all_items_msg));
         builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
@@ -58,7 +107,6 @@ public class SettingsActivity extends AppCompatActivity {
         // Create and show the AlertDialog
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
     }
 
     public static class InventoryPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {

@@ -5,23 +5,31 @@ import android.app.SearchManager;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ivanna.inventory.ProductContract.ProductEntry;
 
@@ -37,6 +45,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        // Check if we have a saved pin code, otherwise prompt to set a pin code:
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String pinCode = sharedPref.getString(getString(R.string.pin_secret_key), null);
+
+        if (pinCode == null) {
+            showPinDialog();
+        }
 
         mSearchTextView = findViewById(R.id.search_instructions);
         mSearchTextView.setVisibility(View.GONE);
@@ -255,4 +271,70 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
     // Implementing search interface END
 
+    // Pin code dialog starts here:
+    public void showPinDialog() {
+
+        LayoutInflater li = LayoutInflater.from(this);
+        View dialogView = li.inflate(R.layout.dialog_pin_code, null);
+        AlertDialog.Builder mDialogBuilder = new AlertDialog.Builder(this);
+        mDialogBuilder.setView(dialogView);
+
+        final EditText pinInput = dialogView.findViewById(R.id.pin_edit_text);
+        final EditText pinValidate = dialogView.findViewById(R.id.pin_validate);
+        final TextView t = dialogView.findViewById(R.id.pin_message);
+
+        pinValidate.setVisibility(View.GONE);
+
+        mDialogBuilder.setCancelable(false);
+        mDialogBuilder.setPositiveButton(R.string.save,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Do nothing here because we override this button later
+                    }
+                });
+        final AlertDialog dialog = mDialogBuilder.create();
+        dialog.show();
+        //Overriding the handler immediately after show:
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get pin value
+                String pin = pinInput.getText().toString();
+                pinInput.setVisibility(View.GONE);
+                if (pin.isEmpty() || pin.length() < 4) {
+                    pinInput.setError(getString(R.string.pin_input_error));
+                } else {
+                    // Continue with pin re-enter validation
+                    pinValidate.setVisibility(View.VISIBLE);
+                    t.setGravity(Gravity.CENTER);
+                    t.setText(getString(R.string.pin_re_enter));
+
+                    if (!t.getText().toString().isEmpty()) {
+                        String pinValidation = pinValidate.getText().toString();
+                        if (!pinValidation.isEmpty() && pinValidation.length() >= 4) {
+                            // Check if user entered the same pin twice:
+                            if (pin.equals(pinValidation)) {
+                                // User input was the same both times, so continue with saving the pin
+                                SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString(getString(R.string.pin_secret_key), pin);
+                                editor.apply();
+                                Toast.makeText(MainActivity.this, getString(R.string.pin_saved),
+                                        Toast.LENGTH_LONG).show();
+                                // Finally, close the dialog
+                                dialog.dismiss();
+                            } else {
+                                // Pins do not match, so show an error and start over
+                                Toast.makeText(MainActivity.this, getString(R.string.pin_no_match),
+                                        Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                                showPinDialog();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 }
