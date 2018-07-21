@@ -1,5 +1,6 @@
 package com.example.ivanna.inventory;
 
+import android.animation.ObjectAnimator;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentUris;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
@@ -107,6 +109,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items
         View emptyView = findViewById(R.id.empty_view);
         warehouseItems.setEmptyView(emptyView);
+        // Add animation to an empty view:
+        if (emptyView.getVisibility() == View.VISIBLE) {
+            ImageView i = findViewById(R.id.empty_view_image);
+            ObjectAnimator animation = ObjectAnimator.ofFloat(i, "translationX", 300f, -200f, 0f);
+            animation.setDuration(3500);
+            animation.start();
+        }
 
         // Setup cursor adapter
         mAdapter = new ProductCursorAdapter(this, null);
