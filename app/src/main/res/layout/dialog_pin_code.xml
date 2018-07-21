@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/quadruple_grid_material_design_32dp">
+
+    <TextView
+        android:id="@+id/pin_message"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/stat_number_150dp"
+        android:layout_gravity="center"
+        android:text="@string/pin_welcome"
+        android:textSize="@dimen/font_subtitle_18sp" />
+
+    <EditText
+        android:id="@+id/pin_edit_text"
+        android:layout_width="@dimen/stat_number_150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:inputType="numberPassword"
+        android:maxLength="4"
+        android:paddingTop="@dimen/quadruple_grid_material_design_32dp"
+        android:textSize="@dimen/font_h6_material_design_20sp" />
+
+    <EditText
+        android:id="@+id/pin_validate"
+        android:layout_width="@dimen/stat_number_150dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:inputType="numberPassword"
+        android:maxLength="4"
+        android:paddingTop="@dimen/quadruple_grid_material_design_32dp"
+        android:textSize="@dimen/font_h6_material_design_20sp" />
+
+</LinearLayout>

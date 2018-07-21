@@ -71,4 +71,14 @@
     <string name="settings_step_default">1</string>
     <string name="settings_delete_all_key">delete_everything_key</string>
 
+    <!-- Pin code related strings -->
+    <string name="pin_welcome">Please set a pin code to enable the advanced settings. If you are using this app for commercial purposes, ask your supervisor to create the pin. Only an authorized person should have access to this pin code.</string>
+    <string name="pin_secret_key">6fH4489W5t8Go6CDE3h98S5HP</string>
+    <string name="pin_input_error">Please enter a four-digit PIN code!</string>
+    <string name="pin_re_enter">Please re-enter your PIN code!</string>
+    <string name="pin_no_match">PIN codes do not match!</string>
+    <string name="pin_saved">PIN code successfully saved!\n\nPin code does not fully protect against data loss. Never give your phone to anyone you do not implicitly trust.</string>
+    <string name="pin_please">Advanced settings! Please enter a PIN code to continue.</string>
+    <string name="pin_incorrect">Entered PIN code is not correct!</string>
+
 </resources>
