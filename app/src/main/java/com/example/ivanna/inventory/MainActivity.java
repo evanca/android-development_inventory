@@ -89,9 +89,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                         // to refresh it if user taps a "Home" button
                         getSupportActionBar().hide();
                         mSearchTextView.setVisibility(View.GONE);
-                        mAdapter = new ProductCursorAdapter(getApplicationContext(), null);
-                        warehouseItems.setAdapter(mAdapter);
-                        prepareLoader();
+                        setupAdapter();
                         break;
                     case R.id.stats_nav:
                         Intent open_stats = new Intent(MainActivity.this, StatsActivity.class);
@@ -117,15 +115,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             animation.start();
         }
 
-        // Setup cursor adapter
-        mAdapter = new ProductCursorAdapter(this, null);
-
-        // Attach cursor adapter to the ListView
-        warehouseItems.setAdapter(mAdapter);
-
-        // Prepare the loader
-        // Saved to a private method for being able to be called from OnNavigationItemSelectedListener
-        prepareLoader();
+        // Adapter and loader setup saved to a private method for being able to be called from OnNavigationItemSelectedListener
+        setupAdapter();
 
         warehouseItems.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -141,7 +132,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         handleIntent(getIntent());
     }
 
-    private void prepareLoader() {
+    private void setupAdapter() {
+
+        // Setup cursor adapter
+        mAdapter = new ProductCursorAdapter(this, null);
+        // Attach cursor adapter to the ListView
+        warehouseItems.setAdapter(mAdapter);
+        // Prepare the loader
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
