@@ -127,7 +127,9 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         } else {
             int countNoStock = noStockCursor.getCount();
             TextView noStock = findViewById(R.id.no_stock_text);
-            noStock.setText(String.valueOf(countNoStock) + " " + getString(R.string.models));
+            // When using the getQuantityString() method, you need to pass the count twice if your
+            // string includes string formatting with a number.
+            noStock.setText(getResources().getQuantityString(R.plurals.models, countNoStock, countNoStock));
         }
     }
 
