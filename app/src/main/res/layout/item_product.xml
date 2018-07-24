@@ -66,6 +66,7 @@
 
     <Button
         android:id="@+id/button"
+        android:text="@string/quick_sell"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/quadruple_grid_material_design_32dp"
         android:padding="0dp"

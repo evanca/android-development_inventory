@@ -12,6 +12,7 @@
     <string name="shelf_no">Shelf no.</string>
     <string name="supplier_code">Supplier code</string>
     <string name="supplier_phone">Supplier phone</string>
+    <string name="quick_sell">QUICK SELL</string>
     <string name="editor_insert_successful">Product saved</string>
     <string name="editor_insert_failed">Error with saving an item</string>
     <string name="nothing_in_the_warehouse_now">Nothing in the warehouse now...</string>
