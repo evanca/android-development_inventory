@@ -10,7 +10,7 @@
         android:title="@string/settings_max_quantity" />
 
     <ListPreference
-        android:defaultValue="1"
+        android:defaultValue="@string/settings_currency_EUR"
         android:entries="@array/entries"
         android:entryValues="@array/entry_values"
         android:key="@string/settings_currency_key"
