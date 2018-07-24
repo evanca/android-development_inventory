@@ -1,9 +1,6 @@
 package com.example.ivanna.inventory;
 
-import android.app.LoaderManager;
 import android.app.ProgressDialog;
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -14,15 +11,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ivanna.inventory.ProductContract.ProductEntry;
+public class StatsActivity extends AppCompatActivity {
 
-public class StatsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
-    private static final int PRODUCT_LOADER = 0;
     String maxQuantity;
     String currency;
-    private int countNumberOfGoods = 0;
+    private int productSum = 0;
     private double sumStockValue = 0.00;
+    private Cursor productSumCursor;
     private Cursor stockValueCursor;
     private Cursor supplierCountCursor;
     private Cursor noStockCursor;
@@ -59,48 +54,27 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         // Here we need to use an SQLiteOpenHelper because Content Providers don't support rawQuery()
         mDbHelper = new ProductDbHelper(this);
         new rawQueryAsyncTask().execute();
-
-        // Prepare the loader to count the number of items on stock
-        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
-    }
-
-    // This is called when a new Loader needs to be created.
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Create and return a CursorLoader that will take care of
-        // creating a Cursor for counting ID's
-        String[] projection = {
-                ProductEntry._ID,};
-
-        return new CursorLoader(
-                this,
-                ProductEntry.CONTENT_URI,
-                projection,
-                null,
-                null,
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        countNumberOfGoods = data.getCount();
-        TextView numberOfGoods = findViewById(R.id.number_of_goods);
-        numberOfGoods.setText(String.valueOf(countNumberOfGoods) + " / " + maxQuantity);
-
-        // Calculate the fullness of the warehouse to show in our pie chart:
-        ProgressBar pieChart = findViewById(R.id.stats_progressbar);
-        double d = (double) countNumberOfGoods / (double) Integer.valueOf(maxQuantity);
-        int progress = (int) (d * 100);
-        pieChart.setProgress(progress);
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        countNumberOfGoods = 0;
     }
 
     private void updateTextViews() {
+
+        if (productSumCursor == null) {
+            Toast.makeText(this, getString(R.string.loading_stats_failed),
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            if (productSumCursor.moveToFirst()) {
+                productSum = productSumCursor.getInt(0);
+            }
+            TextView numberOfGoods = findViewById(R.id.number_of_goods);
+            numberOfGoods.setText(String.valueOf(productSum) + " / " + maxQuantity);
+
+            // Calculate the fullness of the warehouse to show in our pie chart:
+            ProgressBar pieChart = findViewById(R.id.stats_progressbar);
+            double d = (double) productSum / (double) Integer.valueOf(maxQuantity);
+            int progress = (int) (d * 100);
+            pieChart.setProgress(progress);
+        }
+
         if (stockValueCursor == null) {
             Toast.makeText(this, getString(R.string.loading_stats_failed),
                     Toast.LENGTH_SHORT).show();
@@ -140,6 +114,7 @@ public class StatsActivity extends AppCompatActivity implements LoaderManager.Lo
         @Override
         protected Object doInBackground(Object[] objects) {
             // Use a rawQuery to calculate stats
+            productSumCursor = mDbHelper.getReadableDatabase().rawQuery("SELECT SUM(quantity) FROM products", null);
             stockValueCursor = mDbHelper.getReadableDatabase().rawQuery("SELECT SUM(price*quantity) FROM products", null);
             supplierCountCursor = mDbHelper.getReadableDatabase().rawQuery("SELECT DISTINCT supplier_code FROM products", null);
             noStockCursor = mDbHelper.getReadableDatabase().rawQuery("SELECT _id FROM products WHERE quantity = 0", null);
