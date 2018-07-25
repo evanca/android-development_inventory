@@ -79,6 +79,8 @@
     <string name="settings_step_default">1</string>
     <string name="settings_delete_all_key">delete_everything_key</string>
     <string name="trash">Trash</string>
+    <string name="settings_export_csv">Export inventory data to CSV</string>
+    <string name="settings_export_csv_key" translatable="false">pref_export</string>
 
     <!-- Pin code related strings -->
     <string name="pin_welcome">Please set a pin code to enable the advanced settings. If you are using this app for commercial purposes, ask your supervisor to create the pin. Only an authorized person should have access to this pin code.</string>
@@ -89,5 +91,13 @@
     <string name="pin_saved">PIN code successfully saved!\n\nPin code does not fully protect against data loss. Never give your phone to anyone you do not implicitly trust.</string>
     <string name="pin_please">Advanced settings! Please enter a PIN code to continue.</string>
     <string name="pin_incorrect">Entered PIN code is not correct!</string>
+
+    <!-- Excel export related strings -->
+    <string name="storage_not_granted">Storage permissions not granted</string>
+    <string name="export_successfull">Database exported successfully!</string>
+    <string name="export_failed">Failed to export data</string>
+    <string name="export_subject">Inventory table in .csv format</string>
+    <string name="export_send">Send file via e-mail</string>
+    <string name="export_dialog">Would you like to save the inventory data to a CSV file?</string>
 
 </resources>

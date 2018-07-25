@@ -1,19 +1,35 @@
 package com.example.ivanna.inventory;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.opencsv.CSVWriter;
+
+import java.io.File;
+import java.io.FileWriter;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -109,6 +125,73 @@ public class SettingsActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    // Method to export the database to CSV. Has to be static to be called from a static PreferenceFragment.
+    public static void exportToCsv(Context c) {
+
+        // First check external storage permissions:
+        int permission = ActivityCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(c, R.string.storage_not_granted, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        ProductDbHelper dbhelper = new ProductDbHelper(c);
+        // Return the primary shared/external storage directory.
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "");
+        if (!exportDir.exists()) {
+            // Creates the directory named by this abstract pathname, including any necessary but nonexistent parent directories.
+            exportDir.mkdirs();
+        }
+
+        File file = new File(exportDir, "inventory_export.csv");
+        try {
+            file.createNewFile();
+
+            // Using "opencsv" parser library for Java:
+            CSVWriter csvWrite = new CSVWriter(new FileWriter(file));
+
+            SQLiteDatabase db = dbhelper.getReadableDatabase();
+            Cursor curCSV = db.rawQuery("SELECT * FROM products", null);
+            csvWrite.writeNext(curCSV.getColumnNames());
+            while (curCSV.moveToNext()) {
+                // Which columns will be exported
+                String arrStr[] = {curCSV.getString(0),
+                        curCSV.getString(1),
+                        curCSV.getString(2),
+                        curCSV.getString(3),
+                        curCSV.getString(4),
+                        curCSV.getString(5),
+                        curCSV.getString(6),
+                        curCSV.getString(7),
+                        curCSV.getString(8)};
+                csvWrite.writeNext(arrStr);
+            }
+            csvWrite.close();
+            curCSV.close();
+
+            Toast.makeText(c, c.getString(R.string.export_successfull), Toast.LENGTH_LONG).show();
+
+            // After export is succesfull, send the file via e-mail
+            Uri uri = Uri.parse("file://" + exportDir + "/" + "inventory_export.csv");
+
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+            emailIntent.setType("application/vnd.ms-excel");
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, c.getString(R.string.export_subject));
+            emailIntent.putExtra(Intent.EXTRA_TEXT, c.getString(R.string.export_successfull));
+            emailIntent.putExtra(Intent.EXTRA_STREAM, uri);
+
+            c.startActivity(Intent.createChooser(emailIntent, c.getString(R.string.export_send)));
+        } catch (Exception sqlEx) {
+            Log.e(c.getClass().getSimpleName(), sqlEx.getMessage(), sqlEx);
+            Toast.makeText(c, R.string.export_failed, Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public static class InventoryPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
 
         EditTextPreference editTextPreference;
@@ -161,6 +244,30 @@ public class SettingsActivity extends AppCompatActivity {
 
             Preference stepPref = findPreference(getString(R.string.settings_step_key));
             bindPreferenceSummaryToValue(stepPref);
+
+            Preference exportPref = findPreference(getString(R.string.settings_export_csv_key));
+            exportPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setMessage(getString(R.string.export_dialog));
+                    builder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            exportToCsv(getActivity());
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // User cancelled the dialog
+                        }
+                    });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                    return true;
+                }
+            });
 
             Preference creditsPref = findPreference(getString(R.string.settings_credits_key));
             creditsPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
