@@ -11,13 +11,17 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,15 +42,22 @@ import com.example.ivanna.inventory.ProductContract.ProductEntry;
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int PRODUCT_LOADER = 0;
-    ProductCursorAdapter mAdapter;
+    // Manually calculated number to proportionally adjust margins on different screen sizes:
+    private static final double MARGIN_DIVISOR = 18.6363636;
+    private ProductCursorAdapter mAdapter;
     private TextView mSearchTextView;
     private ListView warehouseItems;
+    private ImageView animImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+
+        // Hide the "add product" hint animation, because we don't know if the adapter is empty now:
+        animImage = findViewById(R.id.animation_icon);
+        animImage.setVisibility(View.GONE);
 
         // Check if we have a saved pin code, otherwise prompt to set a pin code:
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -104,19 +115,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        // Find and set empty view on the ListView, so that it only shows when the list has 0 items
-        View emptyView = findViewById(R.id.empty_view);
-        warehouseItems.setEmptyView(emptyView);
-        // Add animation to an empty view:
-        if (emptyView.getVisibility() == View.VISIBLE) {
-            ImageView i = findViewById(R.id.empty_view_image);
-            ObjectAnimator animation = ObjectAnimator.ofFloat(i, "translationX", 300f, -200f, 0f);
-            animation.setDuration(3500);
-            animation.start();
-        }
-
         // Adapter and loader setup saved to a private method for being able to be called from OnNavigationItemSelectedListener
         setupAdapter();
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items
+        View emptyView = findViewById(R.id.empty);
+        warehouseItems.setEmptyView(emptyView);
 
         warehouseItems.setOnItemClickListener(new OnItemClickListener() {
             @Override
@@ -176,6 +180,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Swap the new cursor in.  (The framework will take care of closing the
         // old cursor once we return.)
         mAdapter.swapCursor(data);
+
+        // Add animation to an empty view if adapter is empty
+        // Note that we have to check the adapter emptiness / size in this onLoadFinished method, otherwise it will always return 0 items
+        if (mAdapter.isEmpty()) {
+            animateEmptyView();
+        } else {
+            animImage.setVisibility(View.GONE);
+        }
     }
 
     // This method is called when a previously created loader is being reset, thus making its data
@@ -278,7 +290,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     // Implementing search interface END
 
     // Pin code dialog starts here:
-    public void showPinDialog() {
+    private void showPinDialog() {
 
         LayoutInflater li = LayoutInflater.from(this);
         View dialogView = li.inflate(R.layout.dialog_pin_code, null);
@@ -342,5 +354,44 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 }
             }
         });
+    }
+
+    private void animateEmptyView() {
+
+        // Add animation to the empty view image:
+        ImageView i = findViewById(R.id.empty_view_image);
+        ObjectAnimator animation = ObjectAnimator.ofFloat(i, "translationX", 300f, -200f, 0f);
+        animation.setDuration(3500);
+        animation.start();
+
+        // Proportionally adjust "add product" hint animation margins on different screen sizes, so
+        // the animation would be in a right place of the BottomNavigationView:
+        DisplayMetrics displayMetrics = this.getResources().getDisplayMetrics();
+        float dpRatio = displayMetrics.density;
+        // Get screen width in dp:
+        float dpWidth = displayMetrics.widthPixels / dpRatio;
+        // Calculate improved left margin based on a screen size
+        // Smaller screen will result in a smaller margin:
+        float dpImprovedMarginLeft = (float) (dpWidth / MARGIN_DIVISOR);
+        // Convert the value to pixels:
+        int pixelValue = (int) (dpImprovedMarginLeft * dpRatio);
+        // Set new left margin using LayoutParams and leave the bottom margin unchanged:
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) animImage.getLayoutParams();
+        int bottomMargin = params.bottomMargin;
+        params.setMargins(pixelValue, 0, 0, bottomMargin);
+        animImage.setLayoutParams(params);
+
+        // After the first animation has stopped, start "add product" animation
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                animImage.setVisibility(View.VISIBLE);
+                // Animate the view using AnimationDrawable:
+                animImage.setBackgroundResource(R.drawable.anim_menu);
+                ((AnimationDrawable) animImage.getBackground()).start();
+            }
+        }, 5000);
+
     }
 }

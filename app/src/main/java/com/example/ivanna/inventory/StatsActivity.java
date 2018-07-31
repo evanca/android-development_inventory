@@ -41,10 +41,9 @@ public class StatsActivity extends AppCompatActivity {
 
         // If custom currency is set, use it instead of a pre-defined currency:
         if (currency.equals(getString(R.string.settings_currency_custom_title))) {
-            String checkCustomCurrency = sharedPrefs.getString(
+            currency = sharedPrefs.getString(
                     getString(R.string.settings_currency_key_custom),
                     getString(R.string.settings_currency_EUR));
-            currency = checkCustomCurrency;
             // If user forgot to input a custom value, just use the default:
             if (currency.isEmpty()) {
                 currency = getString(R.string.settings_currency_EUR);

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item
+        android:drawable="@drawable/empty_anim_frame"
+        android:duration="350" />
+    <item
+        android:drawable="@drawable/ic_selector_square_border_small"
+        android:duration="350" />
+</animation-list>

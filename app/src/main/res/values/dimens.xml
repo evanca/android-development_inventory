@@ -12,4 +12,7 @@
     <dimen name="pie_chart_300dp">300dp</dimen>
     <dimen name="stat_title_180dp">180dp</dimen>
     <dimen name="stat_number_150dp">150dp</dimen>
+    <dimen name="animation_icon_margin_left">22dp</dimen>
+    <dimen name="animation_icon_margin_bottom">18dp</dimen>
+    <dimen name="animation_icon_size">36dp</dimen>
 </resources>

@@ -4,4 +4,5 @@
     android:name="com.example.ivanna.inventory.SettingsActivity$InventoryPreferenceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/fragment_settings"
     tools:context="com.example.ivanna.inventory.SettingsActivity" />

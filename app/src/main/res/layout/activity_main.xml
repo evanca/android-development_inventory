@@ -22,4 +22,13 @@
             app:menu="@menu/menu_bottom_navigation" />
     </FrameLayout>
 
+    <ImageView
+        android:id="@+id/animation_icon"
+        android:layout_width="@dimen/animation_icon_size"
+        android:layout_height="@dimen/animation_icon_size"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/animation_icon_margin_bottom"
+        android:layout_marginLeft="@dimen/animation_icon_margin_left"
+        android:src="@drawable/anim_menu" />
+
 </android.support.design.widget.CoordinatorLayout>
