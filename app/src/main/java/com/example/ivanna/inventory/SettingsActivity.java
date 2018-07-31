@@ -88,45 +88,8 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    public void deleteEverything(View v) {
-        // Next dialog after pin validation starts here
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.delete_all_items_msg));
-        builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-
-                // Here we delete ALL the data using ContentResolver().delete
-                int rowsDeleted = getContentResolver().delete(ProductContract.ProductEntry.CONTENT_URI, null, null);
-
-                if (rowsDeleted == 0) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.delete_all_items_failed),
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.delete_all_items_successful),
-                            Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        builder.setTitle(getString(R.string.warning));
-        builder.setIcon(R.drawable.delete);
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     // Method to export the database to CSV. Has to be static to be called from a static PreferenceFragment.
-    public static void exportToCsv(Context c) {
+    private static void exportToCsv(Context c) {
 
         // First check external storage permissions:
         int permission = ActivityCompat.checkSelfPermission(c, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -190,6 +153,43 @@ public class SettingsActivity extends AppCompatActivity {
             Log.e(c.getClass().getSimpleName(), sqlEx.getMessage(), sqlEx);
             Toast.makeText(c, R.string.export_failed, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void deleteEverything(View v) {
+        // Next dialog after pin validation starts here
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.delete_all_items_msg));
+        builder.setPositiveButton(getString(R.string.delete), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+
+                // Here we delete ALL the data using ContentResolver().delete
+                int rowsDeleted = getContentResolver().delete(ProductContract.ProductEntry.CONTENT_URI, null, null);
+
+                if (rowsDeleted == 0) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.delete_all_items_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), getString(R.string.delete_all_items_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        builder.setTitle(getString(R.string.warning));
+        builder.setIcon(R.drawable.delete);
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public static class InventoryPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {

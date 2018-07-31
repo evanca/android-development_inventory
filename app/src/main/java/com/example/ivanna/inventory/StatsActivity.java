@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 public class StatsActivity extends AppCompatActivity {
 
-    String maxQuantity;
-    String currency;
+    private String maxQuantity;
+    private String currency;
     private int productSum = 0;
     private double sumStockValue = 0.00;
     private Cursor productSumCursor;

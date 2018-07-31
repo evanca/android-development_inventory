@@ -7,7 +7,7 @@ import android.provider.BaseColumns;
 // The contract class allows you to use the same constants across all the other classes in the same package.
 // This lets you change a column name in one place and have it propagate throughout your code.
 
-public final class ProductContract {
+final class ProductContract {
 
     /**
      * A convenient string to use for the content authority is the package name for the app, which
@@ -18,7 +18,7 @@ public final class ProductContract {
      * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
      * the content provider.
      */
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+    private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     // Path that points to individual table
     public static final String PATH_PRODUCTS = "products_table";

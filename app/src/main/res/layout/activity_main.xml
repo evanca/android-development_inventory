@@ -29,6 +29,7 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/animation_icon_margin_bottom"
         android:layout_marginLeft="@dimen/animation_icon_margin_left"
+        android:layout_marginStart="@dimen/animation_icon_margin_left"
         android:src="@drawable/anim_menu" />
 
 </android.support.design.widget.CoordinatorLayout>

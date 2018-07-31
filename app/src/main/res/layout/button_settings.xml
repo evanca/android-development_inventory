@@ -5,4 +5,4 @@
     android:layout_height="wrap_content"
     android:background="@null"
     android:onClick="checkPinCode"
-    android:src="@drawable/delete"></ImageButton>
+    android:src="@drawable/delete" />

@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 
 // Helper class to disable default shift mode for a BottomNavigationView
 
-public class BottomNavigationViewHelper {
+class BottomNavigationViewHelper {
     @SuppressLint("RestrictedApi")
     public static void disableShiftMode(BottomNavigationView view) {
         BottomNavigationMenuView menuView = (BottomNavigationMenuView) view.getChildAt(0);

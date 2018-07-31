@@ -16,7 +16,7 @@ public class ProductProvider extends ContentProvider {
     /**
      * Tag for the log messages
      */
-    public static final String LOG_TAG = ProductProvider.class.getSimpleName();
+    private static final String LOG_TAG = ProductProvider.class.getSimpleName();
 
     /**
      * URI matcher code for the content URI for the products table.

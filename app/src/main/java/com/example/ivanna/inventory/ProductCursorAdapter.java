@@ -22,7 +22,7 @@ import java.text.DecimalFormat;
 // Additionally, using MergeCursor with this class will not work
 // if the merged Cursors have overlapping values in their "_id" columns.
 
-public class ProductCursorAdapter extends CursorAdapter {
+class ProductCursorAdapter extends CursorAdapter {
 
     public ProductCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);

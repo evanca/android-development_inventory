@@ -15,7 +15,7 @@
     <string name="quick_sell">QUICK SELL</string>
     <string name="editor_insert_successful">Product saved</string>
     <string name="editor_insert_failed">Error with saving an item</string>
-    <string name="nothing_in_the_warehouse_now">Nothing in the warehouse now...</string>
+    <string name="nothing_in_the_warehouse_now">Nothing in the warehouse now…</string>
     <string name="get_started_by_adding_a_product">Get started by adding a product</string>
     <string name="add_a_new_item">Add a new item</string>
     <string name="edit_an_item">Edit an item</string>
@@ -45,7 +45,7 @@
     <string name="supplier_count">Supplier count:</string>
     <string name="out_of_stock">Out of stock:</string>
     <string name="loading_stats_failed">Error with loading stats</string>
-    <string name="getting_data_stats">Getting data stats...</string>
+    <string name="getting_data_stats">Getting data stats…</string>
     <plurals name="models">
         <item quantity="one">%d model</item>
         <item quantity="other">%d models</item>

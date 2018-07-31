@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="42" />
+                                                <entry key="scalingPercent" value="67" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -35,7 +35,7 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="95d9da" />
-                                      <entry key="foregroundImage" value="C:\Users\Ivanna\Desktop\packing.png" />
+                                      <entry key="foregroundImage" value="C:\Users\Ivanna\Desktop\import.svg" />
                                     </map>
                                   </option>
                                 </PersistentState>

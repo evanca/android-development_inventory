@@ -63,7 +63,7 @@ public class EditorActivity extends AppCompatActivity implements android.app.Loa
     /**
      * OnTouchListener that listens for any user touches on a View
      */
-    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+    private final View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             mProductHasChanged = true;
