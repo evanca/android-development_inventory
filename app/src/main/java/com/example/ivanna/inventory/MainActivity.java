@@ -214,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void handleIntent(Intent intent) {
-        // TODO: Implement recent query suggestions?
         if (Intent.ACTION_VIEW.equals(intent.getAction())) {
             // Handles a click on a search suggestion & launches editor activity
             Intent i = new Intent(this, EditorActivity.class);
@@ -222,7 +221,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             startActivity(i);
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // Handles a search query
-            String searchQuery = intent.getStringExtra(SearchManager.QUERY);
+            // Add "%" to search by part of the name instead of the full name
+            String searchQuery = "%" + intent.getStringExtra(SearchManager.QUERY) + "%";
             showResults(searchQuery);
         }
     }
@@ -255,7 +255,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             // Display the number of results
             int count = searchCursor.getCount();
             String countString = getResources().getQuantityString(R.plurals.search_results,
-                    count, count, searchQuery);
+                    // Use .substring to remove "%"
+                    count, count, searchQuery.substring(1, searchQuery.length() - 1));
             mSearchTextView.setText(countString);
 
             // Setup search cursor adapter
@@ -272,7 +273,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         inflater.inflate(R.menu.menu_search, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        if (searchManager != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        }
         searchView.setIconifiedByDefault(false);
         return true;
     }
@@ -321,6 +324,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 String pin = pinInput.getText().toString();
                 pinInput.setVisibility(View.GONE);
                 if (pin.isEmpty() || pin.length() < 4) {
+                    pinInput.setVisibility(View.VISIBLE);
                     pinInput.setError(getString(R.string.pin_input_error));
                 } else {
                     // Continue with pin re-enter validation
