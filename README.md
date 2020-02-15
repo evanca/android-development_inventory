@@ -24,7 +24,7 @@ Tested on a Sony Xperia Z1 Compact device (portrait mode)<br>
 
 [![YouTube](/08-03%2020_47_25-Android%20Basics%20_%20Warehouse%20Inventory%20App%20Demo%20-%20YouTube.png)](https://www.youtube.com/watch?v=TidRLk_y3Vs)
 
-<img src="https://raw.githubusercontent.com/evanca/ABND_P8-P9_Inventory/master/gif.gif" height="639">
+<img src="/gif.gif" height="639">
 
 #### Credits: ####
 
